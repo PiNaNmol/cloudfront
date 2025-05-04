@@ -6,6 +6,7 @@ import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import MagnifyImage from '@/components/MagnifyImage';
 
 const ProductPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -45,10 +46,11 @@ const ProductPage: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="bg-white rounded-lg shadow p-6 flex items-center justify-center">
-          <img 
+          <MagnifyImage 
             src={product.image} 
             alt={product.name} 
-            className="object-contain max-h-[400px]"
+            width={400}
+            height={400}
           />
         </div>
         
