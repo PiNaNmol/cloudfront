@@ -1,3 +1,4 @@
+
 export interface Product {
   id: string;
   name: string;
@@ -22,7 +23,7 @@ export interface CartItem {
 
 // Strapi specific types
 export interface StrapiResponse<T> {
-  data: StrapiData<T>;
+  data: StrapiData<T>[] | StrapiData<T>;
   meta: StrapiMeta;
 }
 

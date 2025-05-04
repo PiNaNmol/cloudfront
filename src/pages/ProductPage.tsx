@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products } from '@/data/products';
+import { useProduct } from '@/hooks/useStrapi';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
@@ -9,10 +9,18 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const ProductPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
-  const product = products.find(p => p.id === productId);
+  const { product, isLoading, error } = useProduct(productId || '');
   const { addToCart } = useCart();
 
-  if (!product) {
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p>Loading product...</p>
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold mb-4">Product not found</h2>

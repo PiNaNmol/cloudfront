@@ -1,9 +1,19 @@
 
 import React from 'react';
 import ProductGrid from '@/components/ProductGrid';
-import { products } from '@/data/products';
+import { useProducts } from '@/hooks/useStrapi';
 
 const HomePage: React.FC = () => {
+  const { products, isLoading, error } = useProducts();
+
+  if (isLoading) {
+    return <div className="container mx-auto px-4 py-8 text-center">Loading products...</div>;
+  }
+
+  if (error) {
+    return <div className="container mx-auto px-4 py-8 text-center">Error loading products</div>;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">

@@ -3,11 +3,16 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { strapiService, useRealApi } from '@/config/appConfig';
 import { products as localProducts } from '@/data/products';
-import { Product, StrapiProduct, StrapiResponse } from '@/types';
+import { Product, StrapiProduct, StrapiResponse, StrapiData } from '@/types';
 
 // Helper to convert Strapi product format to our app format
-const convertStrapiProduct = (strapiProduct: StrapiResponse<StrapiProduct>): Product[] => {
-  return strapiProduct.data.map(item => ({
+const convertStrapiProduct = (strapiResponse: StrapiResponse<StrapiProduct>): Product[] => {
+  // Handle both array and single item responses
+  const dataArray = Array.isArray(strapiResponse.data) 
+    ? strapiResponse.data 
+    : [strapiResponse.data];
+  
+  return dataArray.map(item => ({
     id: String(item.id),
     name: item.attributes.name,
     price: item.attributes.price,
@@ -44,7 +49,8 @@ export const useProduct = (productId: string) => {
     queryFn: async () => {
       if (useRealApi) {
         const data = await strapiService.fetchProductById(productId);
-        return convertStrapiProduct({ data: [data.data] })[0];
+        const products = convertStrapiProduct(data);
+        return products[0];
       }
       // Fall back to local data if not using real API
       return localProducts.find(product => product.id === productId);
